@@ -1,0 +1,4 @@
+First of all, I didn't change the getProjectionMatrix function, because of the reasons I specified in the latest email.
+Secondly, I don't really get why I even compute the angle and the axis aside from the debugging.
+
+I went through my past email questions and after doing the assignment I think that some of them didn't make much sense :)
