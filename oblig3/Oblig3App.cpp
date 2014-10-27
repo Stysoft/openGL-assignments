@@ -54,7 +54,6 @@ void Oblig3App::display() {
   
   // skip
   // Activate the sahader
-	//glUniform4f(spec_color,0.2,0.3,0.2,0.7);
 	m_shader_.Activate();
 	
   // Bind the texture and bind it to the uniform in the shader
@@ -62,10 +61,6 @@ void Oblig3App::display() {
 	//glBindTexture(GL_TEXTURE_2D, m_texture_.GetTextureId());
 	sampler_loc = m_shader_.GetUniform("DiffuseTex");
 	glUniform1i(sampler_loc,m_texture_.GetTextureId());
-
-	//tex_coords = m_shader_.GetAttribute("TexCoord");
-	
-	
 	
   // Set the value of the SpecularColor uniform in the FragmentShader
 	GLuint spec_color = m_shader_.GetUniform("SpecularColor");
@@ -161,14 +156,12 @@ void Oblig3App::setupShaders() {
 	m_shader_.CompileShader(GL_FRAGMENT_SHADER, frag_shader);
 	m_shader_.CompileShader(GL_VERTEX_SHADER, vert_shader);
 
-  comp_log_frag = m_shader_.GetCompileLog(GL_FRAGMENT_SHADER);
+  	comp_log_frag = m_shader_.GetCompileLog(GL_FRAGMENT_SHADER);
 	comp_log_vert = m_shader_.GetCompileLog(GL_VERTEX_SHADER);
-	
-	
-
+// Link the shader program
 	m_shader_.LinkProgram();
 	
-  // Link the shader program
+
   // unskip
 }
 
