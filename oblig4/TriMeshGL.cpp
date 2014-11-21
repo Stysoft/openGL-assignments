@@ -65,11 +65,10 @@ void TriMesh::computeNormals() {
   // Calculate triangle normals
   // Calculate vertex normals by averaging triange normals
   // unskip
-
   for(int i = 0; i<m_triangles.size(); i++){
-    Node* a = m_triangles[i]-> m_he_ -> getSourceNode();
-    Node* b = m_triangles[i]-> m_he_ -> m_next_ -> getSourceNode();
-    Node* c = m_triangles[i]-> m_he_ -> m_next_ -> m_next_ -> getSourceNode();
+    Node* a = m_triangles[i]-> m_he_ -> m_from_;
+    Node* b = m_triangles[i]-> m_he_ -> m_next_ -> m_from_;
+    Node* c = m_triangles[i]-> m_he_ -> m_next_ -> m_next_ -> m_from_;
     m_triangles[i]->m_N_ = glm::normalize(glm::cross(  
     (b->m_pos_ - a->m_pos_), (c->m_pos_ - a->m_pos_)
     ));
@@ -83,12 +82,14 @@ void TriMesh::computeNormals() {
     HalfEdge* edge = m_nodes[i].m_he_;
     normal += edge->getTriangle()->m_N_;
     for(;;){
-        edge = edge -> m_next_ -> m_twin_;
-        if (edge == NULL || edge == m_nodes[i].m_he_) break;
+        edge = edge -> getVtxRingNext(); 
+        if (edge == NULL) break;
+        if (edge == m_nodes[i].m_he_) break;
         normal += edge->getTriangle()->m_N_;
         count += 1.0;
     }
-    normal = normal/count;
+    
+    normal /= count;
     m_nodes[i].m_N_ = normal;
   }
 
