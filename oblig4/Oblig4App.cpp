@@ -100,6 +100,12 @@ void Oblig4App::keyboard(unsigned char key, int /*x*/, int /*y*/) {
     case '-':
       if (m_current_level_) --m_current_level_;
       break;
+    case 'k':
+		glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+		break;
+	case 'l':
+		glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+		break;
   }
   glutPostRedisplay();
 }
