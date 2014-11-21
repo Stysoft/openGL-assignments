@@ -157,12 +157,11 @@ void TriMesh::buildConnectivity() {
   // - We get the one that we started with (no need to do anything)
   // - We get NULL - then the previous choice should be used as the nodes leading halfedge
   // unskip
-	
-	std::vector<SortElement*> helper;
-	for(int i = 0; i< m_triangles.size(); ++i){
-		helper.push_back(new SortElement(m_triangles[i]->m_he_));
-		helper.push_back(new SortElement(m_triangles[i]->m_he_->m_next_));
-		helper.push_back(new SortElement(m_triangles[i]->m_he_->m_next_->m_next_));
+
+
+	std::vector<SortElement> helper;
+	for(int i = 0; i< m_halfedges.size(); ++i){
+		helper.push_back(SortElement(m_halfedges[i]));
 	}
 	
 	std::sort(helper.begin(),helper.end());
@@ -170,28 +169,26 @@ void TriMesh::buildConnectivity() {
 	for(int j = 0; j< helper.size(); j++){
 		int i;
 		for(i = j; i< helper.size()-1; i++)
-			if(helper[i]->m_a != helper[i+1]->m_a
-				|| helper[i]->m_b != helper[i+1]->m_b) 
+			if(helper[i].m_a != helper[i+1].m_a
+				|| helper[i].m_b != helper[i+1].m_b) 
 				break;
-
-			if(i == j){
+		if(i == j){
 				//helper[j] is boundary
-				helper[j]->m_he->m_twin_ = NULL;
-				;
-			}
-			else if (i==j+1){
+				helper[j].m_he->m_twin_ = NULL;
+		}
+		else if (i==j+1){
 				//connect the triangles of helper[i] and helper[j]
-				helper[j]->m_he->m_twin_ = helper[i]->m_he;
-				helper[i]->m_he->m_twin_  = helper[j]->m_he;
-
-			}
-			else{
+				helper[j].m_he->m_twin_ = helper[i].m_he;
+				helper[i].m_he->m_twin_  = helper[j].m_he;
+		}
+		else{
 				// j..i-1 are non-manifold
 				std::cout << "mesh is not manifold!!!\n";
 				exit(1); 
-			}
-			j=i;	
+		}
+		j=i;	
 	}
+
 
 	for(int i = 0; i< m_nodes.size(); i++){
 		HalfEdge* edge = m_nodes[i].m_he_;
@@ -205,14 +202,12 @@ void TriMesh::buildConnectivity() {
 			m_nodes[i].m_he_ = prev;
 		
 	}
-	
-
 }
 
 TriMesh* TriMesh::subdivide() {
   // Choose one call:
   // return subdivideLoop();
-  // return subdivideSqrt3();
+   return subdivideSqrt3();
   return 0;
 }
 
